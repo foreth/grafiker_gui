@@ -59,7 +59,7 @@ public:
 	void deleteEmployee(Employee& employee);
 	void deleteEmployee(short id);
 	void listEmployees();
-	void makeSchedule(short month, short year);
+    void makeSchedule(short d, days f);
 	void assignFreeDays(short days_in_month, short weekend_days);
     vector<Employee>& getEmployeeList(){ return employee_list; }
 };
@@ -120,7 +120,7 @@ class Month
 	short weekend_days;
 
 public:
-	Month(short month, short year);
+    Month(short d, days f);
 	void printToConsole();
 	short getWorkingHours();
 	vector<Day>& getDayList(){ return day_list; }

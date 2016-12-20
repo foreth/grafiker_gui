@@ -103,12 +103,11 @@ void Shop::listEmployees()
 	}
 }
 
-void Shop::makeSchedule(short month, short year)
+void Shop::makeSchedule(short d, days f)
 {
 	
 	//okresl miesiac
-	Month chosen_month(month, year); // konstuktor Month tworzy wektor dni w tym miesiacu
-	chosen_month.printToConsole();
+    Month chosen_month(d, f); // konstuktor Month tworzy wektor dni w tym miesiacu
 
 	for (Employee emp : employee_list)
 		emp.setWorkingHours(chosen_month.getWorkingHours() * emp.getTimeMultiplier());
@@ -315,10 +314,10 @@ void Shop::assignFreeDays(short days_in_month, short weekend_days) // Employee a
 
 //####################################################################################################
 
-Month::Month(short month, short year)
+Month::Month(short d, days f)
 {
-	this->days_in_month = 30;		// pobrac pozniej ile ten miesiac ma dni
-	days first_day = THURSDAY;		// pobrac jaki jest pierwszy dzien
+    this->days_in_month = d;		// pobrac pozniej ile ten miesiac ma dni
+    days first_day = f;		// pobrac jaki jest pierwszy dzien
 	
 	short help_day = short(first_day);
 

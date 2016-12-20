@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "addempdialog.h"
 #include <QDebug>
+#include <QDate>
 
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent),
@@ -33,6 +34,30 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->monthCombo->addItem("Październik");
     ui->monthCombo->addItem("Listopad");
     ui->monthCombo->addItem("Grudzień");
+
+    //inicjalizacja gridSchedule
+
+    ui->gridSchedule->addWidget(new QLabel(""), 1, 1);
+    ui->gridSchedule->addWidget(new QLabel("Poniedziałek"), 1, 2);
+    ui->gridSchedule->addWidget(new QLabel("Wtorek"), 1, 3);
+    ui->gridSchedule->addWidget(new QLabel("Środa"), 1, 4);
+    ui->gridSchedule->addWidget(new QLabel("Czwartek"), 1, 5);
+    ui->gridSchedule->addWidget(new QLabel("Piątek"), 1, 6);
+    ui->gridSchedule->addWidget(new QLabel("Sobota"), 1, 7);
+    ui->gridSchedule->addWidget(new QLabel("Niedziela"), 1, 8);
+
+    for(int i = 0; i < 16; i++) // 14 to liczba godzin roboczych...
+    {
+        ui->gridSchedule->addWidget(new QLabel(QString::number(7 + i) + ":00"), 2 + i, 1);
+        ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 2);
+        ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 3);
+        ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 4);
+        ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 5);
+        ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 6);
+        ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 7);
+        ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 8);
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -126,5 +151,9 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_buttonMakeSchedule_clicked()
 {
-  //  rossmann.makeSchedule(9, 2016);
+    short month = ui->monthCombo->currentIndex();
+    QDate data(2016, month + 1, 1);
+
+    rossmann->makeSchedule(data.daysInMonth(), days(data.dayOfWeek() - 1));
+
 }
