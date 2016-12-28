@@ -11,6 +11,7 @@ enum days {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
 
 
 class Shop;
+class Month;
 
 class Employee
 {
@@ -59,7 +60,7 @@ public:
 	void deleteEmployee(Employee& employee);
 	void deleteEmployee(short id);
 	void listEmployees();
-    void makeSchedule(short d, days f);
+    Month* makeSchedule(short d, days f);
 	void assignFreeDays(short days_in_month, short weekend_days);
     vector<Employee>& getEmployeeList(){ return employee_list; }
 };

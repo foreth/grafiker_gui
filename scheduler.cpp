@@ -103,11 +103,12 @@ void Shop::listEmployees()
 	}
 }
 
-void Shop::makeSchedule(short d, days f)
+Month* Shop::makeSchedule(short d, days f)
 {
 	
 	//okresl miesiac
-    Month chosen_month(d, f); // konstuktor Month tworzy wektor dni w tym miesiacu
+    Month* chosen_month_pointer = new Month(d, f); // konstuktor Month tworzy wektor dni w tym miesiacu
+    Month& chosen_month = *chosen_month_pointer;
 
 	for (Employee emp : employee_list)
 		emp.setWorkingHours(chosen_month.getWorkingHours() * emp.getTimeMultiplier());
@@ -223,20 +224,20 @@ void Shop::makeSchedule(short d, days f)
 
 		for (Day& d : chosen_month.getDayList())
 		{
-			cout << "Dzien " << d.getDate() << ":" << endl;
+            cout << "Dzien " << d.getDate() << ":" << endl;
 
 			for (WorkHour& wh : d.getTime())
 			{
-				cout << wh.getHour() << ":" << endl;
+                cout << wh.getHour() << ":" << endl;
 				for (Employee& emp : wh.getEmployees())
 				{
 					cout << emp.getName() << ", ";
 				}
 				cout << endl;
-			}
+            }
 		}
 
-
+    return chosen_month_pointer;
 }
 
 void Shop::assignFreeDays(short days_in_month, short weekend_days) // Employee and Shop and Month friend

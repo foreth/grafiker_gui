@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->gridSchedule->addWidget(new QLabel("Sobota"), 1, 7);
     ui->gridSchedule->addWidget(new QLabel("Niedziela"), 1, 8);
 
-    for(int i = 0; i < 16; i++) // 14 to liczba godzin roboczych...
+   /* for(int i = 0; i < 16; i++) // 14 to liczba godzin roboczych...
     {
         ui->gridSchedule->addWidget(new QLabel(QString::number(7 + i) + ":00"), 2 + i, 1);
         ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 2);
@@ -56,9 +56,36 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 6);
         ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 7);
         ui->gridSchedule->addWidget(new QLabel(""), 2 + i, 8);
+    }*/
+
+    //utworzenie uchwytów do labeli
+
+    for(int i = 0; i < 7; i++)
+    {
+        cells.push_back(new vector<QLabel*>);
+
+        for(int j = 0; j < 16; j++)
+        {
+            vector<QLabel*>& currVector = *(cells.at(i));
+            currVector.push_back(new QLabel(""));
+        }
     }
 
+     for(int i = 0; i < 16; i++) // 16 to liczba godzin roboczych...
+     {
+         ui->gridSchedule->addWidget(new QLabel(QString::number(7 + i) + ":00"), 2 + i, 1);
+
+
+
+         for(int j = 0; j < 7; j++)
+         {
+             vector<QLabel*>& currVector = *(cells.at(j));
+             ui->gridSchedule->addWidget(currVector.at(i), 2 + i, j + 2);
+         }
+     }
+
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -120,11 +147,6 @@ void MainWindow::on_pushButton_clicked()
        int p = aeD.getPosition();
        int t = aeD.getTime();
 
-        qDebug() << fn << endl;
-        qDebug() << sn << endl;
-        qDebug() << p << endl;
-        qDebug() << 3 - t << endl;
-
        rossmann->addEmployee(fn.toStdString(), sn.toStdString(), positions(p), times(3 - t));   //w ostatnim, bo odwrotnie jest w combo
 
        updateEmpCombo();
@@ -154,6 +176,38 @@ void MainWindow::on_buttonMakeSchedule_clicked()
     short month = ui->monthCombo->currentIndex();
     QDate data(2016, month + 1, 1);
 
-    rossmann->makeSchedule(data.daysInMonth(), days(data.dayOfWeek() - 1));
+    Month* month_schedule_pointer = rossmann->makeSchedule(data.daysInMonth(), days(data.dayOfWeek() - 1));
 
+    Month& month_schedule = *month_schedule_pointer;
+
+    int c_temp = 1;
+    for (Day& d : month_schedule.getDayList())
+    {
+        for (WorkHour& wh : d.getTime())
+        {
+            for (Employee& emp : wh.getEmployees())
+            {
+                QString prevText = getText(wh.getHour() - 6, c_temp);
+                setText(wh.getHour() - 6, c_temp, prevText + "\n" + QString::fromStdString(emp.getName()));
+            }
+        }
+
+        if(++c_temp == 8)
+            break;
+    }
+
+}
+
+void MainWindow::setText(int row, int col, QString text)
+{
+    vector<QLabel*>& currVector = *(cells.at(col - 1));
+    QLabel& currLabel = *(currVector.at(row - 1));
+    currLabel.setText(text);
+}
+
+QString MainWindow::getText(int row, int col)
+{
+    vector<QLabel*>& currVector = *(cells.at(col - 1));
+    QLabel& currLabel = *(currVector.at(row - 1));
+    return currLabel.text();
 }

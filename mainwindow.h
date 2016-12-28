@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "scheduler.h"
+#include <QLabel>
+#include <vector>
 
 namespace Ui {
 class MainWindow;
@@ -24,10 +26,13 @@ private slots:
     void on_pushButton_3_clicked();
 
     void on_buttonMakeSchedule_clicked();
+    void setText(int row, int col, QString text);
+    QString getText(int row, int col);
 
 private:
     Ui::MainWindow *ui;
     Shop* rossmann;
+    vector<vector<QLabel*>*> cells;
 
     void updateEmpCombo();
 };
